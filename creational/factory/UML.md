@@ -1,72 +1,50 @@
-\# Factory Pattern – Payment system
-
-
+# Factory Pattern – Payment system
 
 ```mermaid
-
 classDiagram
+    class PaymentFactory {
+        -_processors: dict
+        +get_processor(payment_type: str) PaymentProcessor
+        +register_processor(payment_type: str, processor_class: type) None
+    }
 
-&#x20;   class PaymentFactory {
+    class PaymentProcessor {
+        <<abstract>>
+        +name: str
+        +error_message: str
+        +validate(details: dict)* bool
+        +process(amount: float, details: dict)* dict
+        #_success(amount: float, fee: float) dict
+        #_failure() dict
+    }
 
-&#x20;       -dict \_processors
+    class CreditCardProcessor {
+        +name: str = "credit_card"
+        +error_message: str = "Invalid card number or CVV"
+        +FEE_RATE: float = 0.029$
+        +validate(details: dict) bool
+        +process(amount: float, details: dict) dict
+    }
 
-&#x20;       +get\_processor(payment\_type) PaymentProcessor
+    class BankTransferProcessor {
+        +name: str = "bank_transfer"
+        +error_message: str = "Invalid IBAN"
+        +FLAT_FEE: float = 1.50$
+        +validate(details: dict) bool
+        +process(amount: float, details: dict) dict
+    }
 
-&#x20;       +register\_processor(payment\_type, processor\_class)
+    class PayPalProcessor {
+        +name: str = "paypal"
+        +error_message: str = "Invalid PayPal email"
+        +FEE_RATE: float = 0.034$
+        +FIXED_FEE: float = 0.30$
+        +validate(details: dict) bool
+        +process(amount: float, details: dict) dict
+    }
 
-&#x20;   }
-
-
-
-&#x20;   class PaymentProcessor {
-
-&#x20;       <<abstract>>
-
-&#x20;       +str name
-
-&#x20;       +str error\_message
-
-&#x20;       +validate(details) bool
-
-&#x20;       +process(amount, details) dict
-
-&#x20;   }
-
-
-
-&#x20;   class CreditCardProcessor {
-
-&#x20;       +validate(details) bool
-
-&#x20;       +process(amount, details) dict
-
-&#x20;   }
-
-&#x20;   class BankTransferProcessor {
-
-&#x20;       +validate(details) bool
-
-&#x20;       +process(amount, details) dict
-
-&#x20;   }
-
-&#x20;   class PayPalProcessor {
-
-&#x20;       +validate(details) bool
-
-&#x20;       +process(amount, details) dict
-
-&#x20;   }
-
-
-
-&#x20;   PaymentFactory ..> PaymentProcessor : creates
-
-&#x20;   PaymentProcessor <|-- CreditCardProcessor
-
-&#x20;   PaymentProcessor <|-- BankTransferProcessor
-
-&#x20;   PaymentProcessor <|-- PayPalProcessor
-
+    PaymentFactory ..> PaymentProcessor : creates
+    PaymentProcessor <|-- CreditCardProcessor
+    PaymentProcessor <|-- BankTransferProcessor
+    PaymentProcessor <|-- PayPalProcessor
 ```
-
