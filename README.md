@@ -36,3 +36,8 @@ Each folder contains the refactored code and its UML class diagram (`UML.md`).
 - **Solution:** a `ReportGeneratorInterface` (the contract: `generate()` returns JSON) and a
   `LegacyReportAdapter` that implements it, wraps the legacy generator, and translates XML to JSON in one private method.
 - **Result:** the dashboard never sees XML, the conversion lives in one place, and the old system stays untouched. 
+
+### Decorator – Order pricing (`structural/decorator`)
+- **Problem:** one `calculate_total()` method with 5 boolean flags; every new option meant editing the method, and the order of operations was hidden.
+- **Solution:** an `OrderComponent` interface, a `BaseOrder`, and an abstract `OrderDecorator` that wraps an order. Each option (shipping, insurance, gift wrap, discount, premium) is its own decorator that adds its cost and description, then delegates to the wrapped order.
+- **Result:** no flags, one class per option (SRP), new options without touching existing code (OCP), and the stacking order is visible in the code.
