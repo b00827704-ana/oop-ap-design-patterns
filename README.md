@@ -1,8 +1,8 @@
 # oop-ap-design-patterns
 # OOP Design Patterns – Exercises
 
-AIDAMS 2A
-Refactoring exercises from the OOP / System Design course
+Ana Petrovic AIDAMS 2A
+Pattern exercises from the OOP System Design course
 Each folder contains the refactored code and its UML class diagram (`UML.md`).
 
 ## Creational patterns
