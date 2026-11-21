@@ -41,4 +41,8 @@ Each folder contains the refactored code and its UML class diagram (`UML.md`).
 - **Problem:** one `calculate_total()` method with 5 boolean flags; every new option meant editing the method, and the order of operations was hidden.
 - **Solution:** an `OrderComponent` interface, a `BaseOrder`, and an abstract `OrderDecorator` that wraps an order. Each option (shipping, insurance, gift wrap, discount, premium) is its own decorator that adds its cost and description, then delegates to the wrapped order.
 - **Result:** no flags, one class per option (SRP), new options without touching existing code (OCP), and the stacking order is visible in the code.
-The cliendt does not know if his order has been decorated or not, it is one iterface for all (instead of creting new interfaces). Also, each decorator handles one fucntion, so it was easier to test and modify them without affecting the overall function of the interface.
+The client does not know if his order has been decorated or not, it is one iterface for all (instead of creting new interfaces). Also, each decorator handles one fucntion, so it was easier to test and modify them without affecting the overall function of the interface.
+
+## Behavioral Pattern
+
+### Strategy Pattern
