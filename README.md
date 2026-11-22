@@ -59,3 +59,21 @@ The client does not know if his order has been decorated or not, it is one iterf
   written once; only the extension comes from the strategy.
 - **Result:** no if/elif chains, each format isolated and testable, formats can be
   changed at runtime, and a new HTML format was added without modifying any existing class.
+
+  ### Template Method – Data ETL pipelines (`behavioral/template_method`)
+- **Problem:** CSVPipeline, APIPipeline and DatabasePipeline each rewrote the same
+  six-step workflow (connect, extract, transform, validate, load, cleanup) in their own `run()`.
+  - The validation loop was repeated 3 times; only the required field names differed.
+  - The cleanup logic was repeated 3 times, word for word.
+  - Adding logging to all pipelines meant editing 3 classes (and every future one),
+    with the risk of forgetting one.
+  - Changing the workflow order meant reordering the steps in 3 places, with nothing
+    guaranteeing the classes stayed consistent; a pipeline could even skip validation.
+  - About half of each class (validate, load, cleanup, the step structure) was duplicated.
+- **Solution:** an abstract `DataProcessPipeline` whose `run()` (the template method)
+  defines the workflow once. Validation, loading and cleanup are written once in the parent;
+  each pipeline only implements the abstract steps (`connect`, `extract`, `transform`,
+  `required_fields`). A hook (`before_load`) lets a pipeline add an optional step.
+- **Result:** the workflow is defined in one place, required steps cannot be skipped,
+  each pipeline contains only what is unique, and a new XMLPipeline was added without
+  changing any existing class.
