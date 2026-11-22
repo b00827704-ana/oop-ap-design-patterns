@@ -7,23 +7,25 @@ classDiagram
         -_config: dict
         +#95;#95;new#95;#95;(cls) ConfigManager
         -_load_config() None
-        +get(key, default) Any
+        +get(key: str, default) Any
         +reload() None
         +get_instance() ConfigManager
     }
 
     class DatabaseService {
-        -config
-        +connect()
+        -config: ConfigManager
+        +connect() None
     }
     class EmailService {
-        -config
-        +send()
+        -config: ConfigManager
+        +send(to: str, subject: str) None
     }
     class PaymentService {
-        -config
-        +process()
+        -config: ConfigManager
+        +process(amount: float) None
     }
+
+    note for ConfigManager "Only ONE instance: the first get_instance() reads config.json, later calls return the same object"
 
     DatabaseService ..> ConfigManager : uses
     EmailService ..> ConfigManager : uses
