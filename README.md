@@ -43,6 +43,19 @@ Each folder contains the refactored code and its UML class diagram (`UML.md`).
 - **Result:** no flags, one class per option (SRP), new options without touching existing code (OCP), and the stacking order is visible in the code.
 The client does not know if his order has been decorated or not, it is one iterface for all (instead of creting new interfaces). Also, each decorator handles one fucntion, so it was easier to test and modify them without affecting the overall function of the interface.
 
-## Behavioral Pattern
 
-### Strategy Pattern
+## Behavioral patterns
+
+### Strategy – Multi-format reports (`behavioral/strategy`)
+- **Problem:** `ReportGenerator` chose the format with if/elif chains in two methods
+  (one to build the content, one to save the file). Adding a format (XML, Markdown)
+  meant changing existing code (breaks Open/Closed), one class handled four formats
+  (breaks Single Responsibility), a single format could not be tested alone, a typo
+  in the format string ("Csv") silently returned "Unknown format", and the format had
+  to be passed as a string on every call.
+- **Solution:** a `FormatStrategy` interface (`format(data)` and `get_extension()`),
+  one class per format (PDF, Excel, CSV, JSON), and a `ReportGenerator` context that
+  holds one strategy and can switch it with `set_strategy()`. The file-saving code is
+  written once; only the extension comes from the strategy.
+- **Result:** no if/elif chains, each format isolated and testable, formats can be
+  changed at runtime, and a new HTML format was added without modifying any existing class.
